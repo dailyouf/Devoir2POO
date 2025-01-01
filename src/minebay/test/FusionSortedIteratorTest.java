@@ -9,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -31,8 +29,8 @@ import static minebay.test.DataProvider.listOfListIterSupplierWithNull;
 import static minebay.test.DataProvider.listOfListIterSupplierWithCmp;
 import static minebay.test.DataProvider.adSupplier;
 import static minebay.test.DataProvider.randInt;
-import test.util.model.ListIterObserver;
-import test.util.model.ListIterObserverAdapter;
+import minebay.test.util.model.ListIterObserver;
+import minebay.test.util.model.ListIterObserverAdapter;
 
 /**
  * Test class for FusionSortedIterator.
@@ -862,4 +860,4 @@ public class FusionSortedIteratorTest {
 		// Invariant:
 		assertInvariant(self);
 	}
-} // End of the test class for FusionSortedIterator
+} // End of the minebay.test class for FusionSortedIterator

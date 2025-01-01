@@ -1,7 +1,7 @@
 /**
  * 
  */
-package test.util.model;
+package minebay.test.util.model;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -158,7 +158,7 @@ public interface IterObserver<E> extends Iterator<E> {
 	/**
 	 * Teste si les éléments de cet Itérateur sont triés par ordre croissant.
 	 * 
-	 * @param cmp le comparateur à utiliser pour ce test
+	 * @param cmp le comparateur à utiliser pour ce minebay.test
 	 * 
 	 * @return true si les éléments de cet Itérateur sont triés par ordre croissant;
 	 *         false sinon

@@ -1,5 +1,9 @@
-package minebay;
+package minebay.test;
 
+import minebay.AdCategory;
+import minebay.ClassifiedAd;
+
+import minebay.FusionSortedIterator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

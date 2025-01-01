@@ -258,24 +258,24 @@ public class TestCollectionContract {
 
 	/*
 	 * public static Collection<String> getRandomCollStr() { return
-	 * test.BaseDataProviders.getRandomCollString(); }
+	 * minebay.test.BaseDataProviders.getRandomCollString(); }
 	 * 
 	 * public static Stream<String> stringProvider() { return
-	 * test.BaseDataProviders.stringProvider(10); }
+	 * minebay.test.BaseDataProviders.stringProvider(10); }
 	 * 
 	 * public static String getRandomString() { return
-	 * test.BaseDataProviders.getRandomElt(test.BaseDataProviders.stringInstances);
+	 * minebay.test.BaseDataProviders.getRandomElt(minebay.test.BaseDataProviders.stringInstances);
 	 * }
 	 */
 	/*
 	 * public static int getRandomInt(int min, int max) { return
-	 * test.BaseDataProviders.randInt(min, max); }
+	 * minebay.test.BaseDataProviders.randInt(min, max); }
 	 */
 
 	/*
 	 * public static Object getRandomString(Collection<?> c) { Object result =
 	 * getRandomString(); if (c != null && !c.isEmpty() && getRandomInt(0,3) == 0) {
-	 * result = test.BaseDataProviders.getRandomElt(c); } return result; }
+	 * result = minebay.test.BaseDataProviders.getRandomElt(c); } return result; }
 	 */
 	public static Collection<ClassifiedAd> getRandomColl(Collection<ClassifiedAd> c) {
 		if (c == null) {
@@ -1205,12 +1205,12 @@ public class TestCollectionContract {
 		// @requires filter != null;
 
 		// Oldies:
-		// old in:@ensures (\forall E obj; \old(contains(obj)) && filter.test(obj);
+		// old in:@ensures (\forall E obj; \old(contains(obj)) && filter.minebay.test(obj);
 		// !contains(obj));
-		// old in:@ensures (\forall E obj; \old(contains(obj)) && !filter.test(obj);
+		// old in:@ensures (\forall E obj; \old(contains(obj)) && !filter.minebay.test(obj);
 		// contains(obj));
 		// old in:@ensures \result <==> (\exists E obj; \old(contains(obj));
-		// filter.test(obj));
+		// filter.minebay.test(obj));
 		// old in:@ensures \result <==> size() < \old(size());
 		// old in:@ensures !\result <==> size() == \old(size());
 
@@ -1218,11 +1218,11 @@ public class TestCollectionContract {
 		boolean result = self.removeIf(filter);
 
 		// Post-conditions:
-		// @ensures (\forall E obj; \old(contains(obj)) && filter.test(obj);
+		// @ensures (\forall E obj; \old(contains(obj)) && filter.minebay.test(obj);
 		// !contains(obj));
-		// @ensures (\forall E obj; \old(contains(obj)) && !filter.test(obj);
+		// @ensures (\forall E obj; \old(contains(obj)) && !filter.minebay.test(obj);
 		// contains(obj));
-		// @ensures \result <==> (\exists E obj; \old(contains(obj)); filter.test(obj));
+		// @ensures \result <==> (\exists E obj; \old(contains(obj)); filter.minebay.test(obj));
 		// @ensures \result <==> size() < \old(size());
 		// @ensures !\result <==> size() == \old(size());
 
@@ -1597,4 +1597,4 @@ public class TestCollectionContract {
 		// Invariant:
 		assertInvariant(self);
 	}
-} // End of the test class for Collection
+} // End of the minebay.test class for Collection

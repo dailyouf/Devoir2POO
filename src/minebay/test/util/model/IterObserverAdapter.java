@@ -1,7 +1,7 @@
 /**
  *
  */
-package test.util.model;
+package minebay.test.util.model;
 
 import java.util.Collection;
 import java.util.Comparator;

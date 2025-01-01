@@ -114,7 +114,15 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 			throw new NullPointerException();
 		}
 
-                this.addAll(c);
+                for (E elem : c) {
+
+                        if (elem == null) {
+                                throw new NullPointerException();
+                        }
+
+                        this.add(elem);
+                }
+
 	}
 
 	/**

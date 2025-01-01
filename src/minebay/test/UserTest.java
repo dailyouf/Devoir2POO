@@ -1274,4 +1274,4 @@ public class UserTest {
 		// Invariant:
 		assertInvariant(self);
 	}
-} // End of the test class for User
+} // End of the minebay.test class for User
