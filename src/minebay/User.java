@@ -64,7 +64,7 @@ import java.util.Set;
  */
 public class User implements Iterable<ClassifiedAd> {
 
-	public static final int DEFAULT_CASH_AMMOUNT = 0;
+	public static final int DEFAULT_CASH_AMMOUNT = 100;
 
 	/**
 	 * Initialise une nouvelle instance ayant les nom et mot de passe spécifiés. La
