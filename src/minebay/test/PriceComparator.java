@@ -4,10 +4,6 @@ import java.util.Comparator;
 
 import minebay.ClassifiedAd;
 
-
-/**
- * 
- */
 public class PriceComparator implements Comparator<ClassifiedAd> {
 	private static final PriceComparator theInstance = new PriceComparator();
 	public static PriceComparator getInstance() {

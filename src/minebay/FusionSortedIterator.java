@@ -318,13 +318,13 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                                 }
 
                                 if (cmp.compare(tmpPrevious, maxPrevious) > 0) {
-                                        fusion.get(maxIter).previous();
+                                        fusion.get(maxIter).next();
                                         maxPrevious = tmpPrevious;
                                         maxIter = cpt;
                                         continue;
                                 }
 
-                                l.previous();
+                                l.next();
 
                         }
 

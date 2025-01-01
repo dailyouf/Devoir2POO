@@ -75,9 +75,9 @@ class FusionSortedIteratorTestV2 {
                 iterator.next();
                 iterator.next();
                 iterator.next();
-                assertEquals(3, iterator.previous());
                 assertEquals(2, iterator.previous());
                 assertEquals(1, iterator.previous());
+                assertEquals(0, iterator.previous());
         }
 
         @Test
