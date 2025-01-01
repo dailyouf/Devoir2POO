@@ -2,145 +2,139 @@ package minebay.test;
 
 import minebay.AdCategory;
 import minebay.ClassifiedAd;
-
 import minebay.MultiEnumList;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.EnumSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 public class MultiEnumListTestV2 {
 
-        /*
-        private MultiEnumList<AdCategory, ClassifiedAd> multiEnumList;
+        @Test
+        void testInitializationWithEmptyConstructor() {
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
 
-        private ClassifiedAd ad1;
-        private ClassifiedAd ad2;
-        private ClassifiedAd ad3;
-        private ClassifiedAd ad4;
-
-        @BeforeEach
-        public void setUp() {
-                multiEnumList = new MultiEnumList<>(AdCategory.class);
-
-                ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Red Dress", 50);
-                ad2 = new ClassifiedAd(AdCategory.SHOES, "Running Shoes", 100);
-                ad3 = new ClassifiedAd(AdCategory.BOOKS, "Java Programming", 30);
-                ad4 = new ClassifiedAd(AdCategory.CLOTHES, "Blue Shirt", 20);
+                assertNotNull(list.getCatType());
+                assertEquals(AdCategory.class, list.getCatType());
+                assertTrue(list.isEmpty());
+                assertEquals(0, list.size());
         }
 
         @Test
-        public void testAdd() {
-                multiEnumList.add(ad1);
-                multiEnumList.add(ad2);
+        void testInitializationWithCollection() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                ClassifiedAd ad2 = new ClassifiedAd(AdCategory.SHOES, "Sneakers", 50);
+                ClassifiedAd ad3 = new ClassifiedAd(AdCategory.BOOKS, "Novel", 10);
 
-                //noinspection unchecked
-                List<ClassifiedAd> clothesAds = (List<ClassifiedAd>) multiEnumList.get(AdCategory.CLOTHES.ordinal());
-                //noinspection unchecked
-                List<ClassifiedAd> shoesAds = (List<ClassifiedAd>) multiEnumList.get(AdCategory.SHOES.ordinal());
+                Set<ClassifiedAd> ads = Set.of(ad1, ad2, ad3);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, ads);
 
-                assertEquals(1, clothesAds.size());
-                assertEquals(1, shoesAds.size());
-                assertTrue(clothesAds.contains(ad1));
-                assertTrue(shoesAds.contains(ad2));
+                assertEquals(3, list.size());
+                assertTrue(list.contains(ad1));
+                assertTrue(list.contains(ad2));
+                assertTrue(list.contains(ad3));
         }
 
         @Test
-        public void testGet() {
-                multiEnumList.add(ad1);
-                multiEnumList.add(ad4);
+        void testAddElement() {
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
+                ClassifiedAd ad = new ClassifiedAd(AdCategory.CLOTHES, "Jeans", 40);
 
-                List<ClassifiedAd> clothesAds = (List<ClassifiedAd>) multiEnumList.get(AdCategory.CLOTHES.ordinal());
-                assertEquals(2, clothesAds.size());
-                assertTrue(clothesAds.contains(ad1));
-                assertTrue(clothesAds.contains(ad4));
+                assertTrue(list.add(ad));
+                assertEquals(1, list.size());
+                assertTrue(list.contains(ad));
         }
 
         @Test
-        public void testRemove() {
-                multiEnumList.add(ad1);
-                multiEnumList.add(ad4);
+        void testAddNullThrowsException() {
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
 
-                assertTrue(multiEnumList.remove(ad1));
-
-                List<ClassifiedAd> clothesAds = (List<ClassifiedAd>) multiEnumList.get(AdCategory.CLOTHES.ordinal());
-                assertEquals(1, clothesAds.size());
-                assertFalse(clothesAds.contains(ad1));
+                assertThrows(NullPointerException.class, () -> list.add(null));
         }
 
         @Test
-        public void testRemoveNonExistentElement() {
-                multiEnumList.add(ad1);
+        void testRemoveElement() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1));
 
-                assertFalse(multiEnumList.remove(AdCategory.CLOTHES, ad3));
+                assertTrue(list.remove(ad1));
+                assertFalse(list.contains(ad1));
+                assertEquals(0, list.size());
         }
 
         @Test
-        public void testClearCategory() {
-                multiEnumList.add(AdCategory.CLOTHES, ad1);
-                multiEnumList.add(AdCategory.CLOTHES, ad4);
+        void testRemoveNonExistentElement() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
 
-                multiEnumList.clear(AdCategory.CLOTHES);
-
-                List<ClassifiedAd> clothesAds = multiEnumList.get(AdCategory.CLOTHES);
-                assertTrue(clothesAds.isEmpty());
+                assertFalse(list.remove(ad1));
         }
 
         @Test
-        public void testClearAll() {
-                multiEnumList.add(AdCategory.CLOTHES, ad1);
-                multiEnumList.add(AdCategory.SHOES, ad2);
-                multiEnumList.clear();
+        void testClear() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                ClassifiedAd ad2 = new ClassifiedAd(AdCategory.SHOES, "Sneakers", 50);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1, ad2));
 
-                assertTrue(multiEnumList.get(AdCategory.CLOTHES).isEmpty());
-                assertTrue(multiEnumList.get(AdCategory.SHOES).isEmpty());
+                list.clear();
+                assertTrue(list.isEmpty());
         }
 
         @Test
-        public void testContains() {
-                multiEnumList.add(AdCategory.CLOTHES, ad1);
+        void testClearWithCategorySet() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                ClassifiedAd ad2 = new ClassifiedAd(AdCategory.SHOES, "Sneakers", 50);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1, ad2));
 
-                assertTrue(multiEnumList.contains(AdCategory.CLOTHES, ad1));
-                assertFalse(multiEnumList.contains(AdCategory.SHOES, ad1));
+                list.clear(EnumSet.of(AdCategory.CLOTHES));
+                assertFalse(list.contains(ad1));
+                assertTrue(list.contains(ad2));
+                assertEquals(1, list.size());
         }
 
         @Test
-        public void testGetInvalidCategory() {
-                List<ClassifiedAd> invalidCategoryAds = multiEnumList.get(AdCategory.GAMES);
-                assertTrue(invalidCategoryAds.isEmpty());
+        void testGetElementByIndex() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                ClassifiedAd ad2 = new ClassifiedAd(AdCategory.SHOES, "Sneakers", 50);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1, ad2));
+
+                assertEquals(ad1, list.get(0));
+                assertEquals(ad2, list.get(1));
         }
 
         @Test
-        public void testExceptionWhenAddingNull() {
-                assertThrows(NullPointerException.class, () -> multiEnumList.add(null, ad1));
-                assertThrows(NullPointerException.class, () -> multiEnumList.add(AdCategory.CLOTHES, null));
+        void testGetElementByIndexOutOfBounds() {
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
+
+                assertThrows(IndexOutOfBoundsException.class, () -> list.get(0));
         }
 
         @Test
-        public void testIterator() {
-                multiEnumList.add(AdCategory.CLOTHES, ad1);
-                multiEnumList.add(AdCategory.CLOTHES, ad4);
-                multiEnumList.add(AdCategory.SHOES, ad2);
+        void testSizeByCategorySet() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                ClassifiedAd ad2 = new ClassifiedAd(AdCategory.SHOES, "Sneakers", 50);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1, ad2));
 
-                var iterator = multiEnumList.iterator();
-
-                int count = 0;
-                while (iterator.hasNext()) {
-                        ClassifiedAd ad = iterator.next();
-                        assertNotNull(ad);
-                        count++;
-                }
-                assertEquals(3, count);
+                assertEquals(1, list.size(EnumSet.of(AdCategory.CLOTHES)));
+                assertEquals(1, list.size(EnumSet.of(AdCategory.SHOES)));
+                assertEquals(0, list.size(EnumSet.of(AdCategory.BOOKS)));
         }
 
         @Test
-        public void testIteratorNoSuchElementException() {
-                var iterator = multiEnumList.iterator();
-                assertThrows(NoSuchElementException.class, iterator::next);
+        void testContains() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class, Set.of(ad1));
+
+                assertTrue(list.contains(ad1));
         }
 
-         */
+        @Test
+        void testContainsNonExistentElement() {
+                ClassifiedAd ad1 = new ClassifiedAd(AdCategory.CLOTHES, "Shirt", 20);
+                MultiEnumList<AdCategory, ClassifiedAd> list = new MultiEnumList<>(AdCategory.class);
+
+                assertFalse(list.contains(ad1));
+        }
 }
