@@ -82,8 +82,8 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
                 //noinspection unchecked
                 listes = (LinkedList<E>[]) new LinkedList[cats.getEnumConstants().length];
 
-		for (LinkedList<E> l : listes) {
-			l = new LinkedList<E>();
+		for (int i = 0; i < listes.length; i++) {
+			listes[i] = new LinkedList<>();
 		}
 	}
 
@@ -283,7 +283,7 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 			throw new NullPointerException();
 		}
 
-		if ((i < 0) || (i >= size())) {
+		if ((i < 0) || (i >= size(catSet))) {
 			throw new IndexOutOfBoundsException();
 		}
 
@@ -322,7 +322,16 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 			throw new NullPointerException();
 		}
 
-		return listes[elt.getCategory().ordinal()].add(elt);
+		LinkedList<E> list = listes[elt.getCategory().ordinal()];
+		ListIterator<E> iter = list.listIterator();
+		while (iter.hasNext()) {
+			if (elt.compareTo(iter.next()) <= 0) {
+				iter.previous();
+				break;
+			}
+		}
+		iter.add(elt);
+		return true;
 	}
 
 	/**
