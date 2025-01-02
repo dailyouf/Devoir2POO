@@ -8,7 +8,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -24,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import minebay.AdCategory;
 import minebay.ClassifiedAd;
 import minebay.MultiEnumList;
-import minebay.test.util.model.ListIterObserverAdapter;
+import test.util.model.ListIterObserverAdapter;
 import minebay.Categorized;
 import static minebay.test.DataProvider.LG_STREAM;
 import static minebay.test.DataProvider.BAD_ARG_PROBA;
@@ -802,4 +804,4 @@ public class MultiEnumListTest extends TestCollectionContract {
 		// Invariant:
 		assertInvariant(self);
 	}
-} // End of the minebay.test class for MultiEnumList
+} // End of the test class for MultiEnumList

@@ -543,4 +543,4 @@ public class ClassifiedAdTest {
 		// Invariant:
 		assertInvariant(self);
 	}
-} // End of the minebay.test class for ClassifiedAd
+} // End of the test class for ClassifiedAd

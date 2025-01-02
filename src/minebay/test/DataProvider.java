@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 package minebay.test;
 
 import java.util.ArrayList;
@@ -23,6 +26,9 @@ import minebay.ClassifiedAd;
 import minebay.MultiEnumList;
 import minebay.User;
 
+/**
+ * 
+ */
 public class DataProvider {
 	public static final int LG_STREAM = 200;
 	public static final int BAD_ARG_PROBA = 50;
@@ -35,8 +41,6 @@ public class DataProvider {
 	private static List<User> allUsers;
 	private static List<ClassifiedAd> allAds;
 	private static Random randGen = new Random();
-
-
 
 	static {
 		//System.out.println("Début init User");
