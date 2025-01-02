@@ -184,7 +184,12 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		return cats.add(cat);
+		if (cats.contains(cat)) {
+			return false;
+		}
+
+		cats.add(cat);
+		return true;
 	}
 
 	/**
@@ -447,7 +452,27 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public int size(AdState state, Set<AdCategory> catSet) {
-		return -1;
+
+		if ((state == null) || (catSet == null)) {
+			throw new NullPointerException();
+		}
+
+		switch (state) {
+			case AdState.OPEN:
+				return open.size(catSet);
+
+			case AdState.CLOSED:
+				return closed.size(catSet);
+
+			case AdState.PURCHASE:
+				return purchaces.size(catSet);
+
+
+			default:
+				return 0;
+		}
+
+
 	}
 
 	/**
@@ -499,7 +524,26 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public ClassifiedAd get(AdState state, Set<AdCategory> catSet, int i) {
-		return null;
+
+		if ((state == null) || (catSet == null)) {
+			throw new NullPointerException();
+		}
+
+		switch (state) {
+			case AdState.OPEN:
+				return open.get(catSet, i);
+
+			case AdState.CLOSED:
+				return closed.get(catSet, i);
+
+			case AdState.PURCHASE:
+				return purchaces.get(catSet, i);
+
+
+			default:
+				return null;
+		}
+
 	}
 
 	/**
@@ -519,7 +563,25 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public boolean containsInState(AdState state, Object obj) {
-		return false;
+
+		if ((state == null) || (obj == null)) {
+			throw new NullPointerException();
+		}
+
+		switch (state) {
+
+			case AdState.OPEN:
+				return open.contains(obj);
+
+			case AdState.CLOSED:
+				return closed.contains(obj);
+
+			case AdState.PURCHASE:
+				return purchaces.contains(obj);
+
+			default:
+				return false;
+		}
 	}
 
 	/**
@@ -535,7 +597,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public ListIterator<ClassifiedAd> iterator() {
-		return null;
+		return iterator(state, cats);
 	}
 
 	/**
@@ -554,7 +616,26 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public ListIterator<ClassifiedAd> iterator(AdState state, Set<AdCategory> catSet) {
-		return null;
+
+		if ((state == null) || (catSet == null)) {
+			throw new NullPointerException();
+		}
+
+		switch (state) {
+
+			case AdState.OPEN:
+				return open.listIterator(catSet);
+
+			case AdState.CLOSED:
+				return closed.listIterator(catSet);
+
+			case AdState.PURCHASE:
+				return purchaces.listIterator(catSet);
+
+			default:
+				return null;
+		}
+
 	}
 
 	/**
@@ -575,8 +656,8 @@ public class User implements Iterable<ClassifiedAd> {
 	 */
 	@Override
 	public String toString() {
-		String s = "L'utilisateur " + name + " a : \n" + open.toString() + " \n" + closed.toString() +
-			"\n" + purchaces.toString() + "\n\n\n";
+		String s = "L'utilisateur " + name + " a : " + open.size() + " OPEN ads, " + closed.size() +
+			" CLOSED ads and " + purchaces.size() + "PURCHASE ads \n";
 		return s;
 	}
 }
