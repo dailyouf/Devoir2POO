@@ -64,6 +64,7 @@ import java.util.Set;
  * @version 26/11/2024
  * 
  */
+@SuppressWarnings("FieldMayBeFinal")
 public class User implements Iterable<ClassifiedAd> {
 
 	public static final int DEFAULT_CASH_AMMOUNT = 100;
@@ -200,7 +201,8 @@ public class User implements Iterable<ClassifiedAd> {
 	 *          getSelectedCategories().equals(\old(getSelectedCategories()));
 	 */
 	public boolean removeSelectedCategory(Object obj) {
-		return cats.remove(obj);
+                //noinspection SuspiciousMethodCalls
+                return cats.remove(obj);
 	}
 
 	/**
@@ -454,23 +456,17 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		switch (state) {
-			case AdState.OPEN:
-				return open.size(catSet);
-
-			case AdState.CLOSED:
-				return closed.size(catSet);
-
-			case AdState.PURCHASE:
-				return purchaces.size(catSet);
-
-
-			default:
-				return 0;
-		}
+                if (state == AdState.OPEN) {
+                        return open.size(catSet);
+                } else if (state == AdState.CLOSED) {
+                        return closed.size(catSet);
+                } else if (state == AdState.PURCHASE) {
+                        return purchaces.size(catSet);
+                }
+                return 0;
 
 
-	}
+        }
 
 	/**
 	 * Renvoie la ième plus récente annonce de ce User dans l'état sélectionné et
@@ -527,22 +523,16 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		switch (state) {
-			case AdState.OPEN:
-				return open.get(catSet, i);
+                if (state == AdState.OPEN) {
+                        return open.get(catSet, i);
+                } else if (state == AdState.CLOSED) {
+                        return closed.get(catSet, i);
+                } else if (state == AdState.PURCHASE) {
+                        return purchaces.get(catSet, i);
+                }
+                return null;
 
-			case AdState.CLOSED:
-				return closed.get(catSet, i);
-
-			case AdState.PURCHASE:
-				return purchaces.get(catSet, i);
-
-
-			default:
-				return null;
-		}
-
-	}
+        }
 
 	/**
 	 * Renvoie true si ce User possède parmi les annonces dans l'état spécifié,
@@ -566,21 +556,18 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		switch (state) {
-
-			case AdState.OPEN:
-				return open.contains(obj);
-
-			case AdState.CLOSED:
-				return closed.contains(obj);
-
-			case AdState.PURCHASE:
-				return purchaces.contains(obj);
-
-			default:
-				return false;
-		}
-	}
+                if (state == AdState.OPEN) {
+                        //noinspection SuspiciousMethodCalls
+                        return open.contains(obj);
+                } else if (state == AdState.CLOSED) {
+                        //noinspection SuspiciousMethodCalls
+                        return closed.contains(obj);
+                } else if (state == AdState.PURCHASE) {
+                        //noinspection SuspiciousMethodCalls
+                        return purchaces.contains(obj);
+                }
+                return false;
+        }
 
 	/**
 	 * Renvoie un itérateur sur les annonces dans l'état sélectionné et appartenant
@@ -623,22 +610,16 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		switch (state) {
+                if (state == AdState.OPEN) {
+                        return open.listIterator(catSet);
+                } else if (state == AdState.CLOSED) {
+                        return closed.listIterator(catSet);
+                } else if (state == AdState.PURCHASE) {
+                        return purchaces.listIterator(catSet);
+                }
+                return null;
 
-			case AdState.OPEN:
-				return open.listIterator(catSet);
-
-			case AdState.CLOSED:
-				return closed.listIterator(catSet);
-
-			case AdState.PURCHASE:
-				return purchaces.listIterator(catSet);
-
-			default:
-				return null;
-		}
-
-	}
+        }
 
 	/**
 	 * Renvoie une chaîne de caractères contenant le nom de ce User ainsi que le
@@ -658,8 +639,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 */
 	@Override
 	public String toString() {
-		String s = "L'utilisateur " + name + " a : " + open.size() + " OPEN ads, " + closed.size() +
-			" CLOSED ads and " + purchaces.size() + "PURCHASE ads \n";
-		return s;
+                return "L'utilisateur " + name + " a : " + open.size() + " OPEN ads, " + closed.size() +
+                        " CLOSED ads and " + purchaces.size() + "PURCHASE ads \n";
 	}
 }
