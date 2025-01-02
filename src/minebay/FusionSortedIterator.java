@@ -199,39 +199,31 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                         throw new NoSuchElementException();
                 }
 
-                int cpt = 0, minIter = 0;
-                E minNext = null, tmpNext;
+                E minElement = null;
+                int minIteratorIndex = -1;
 
-                for (ListIterator<E> l : fusion) {
-
-                        if (l.hasNext()) {
-
-                                tmpNext = l.next();
-
-                                if (minNext == null) {
-                                        minNext = tmpNext;
-                                        minIter = cpt;
-                                        continue;
+                for (int i = 0; i < fusion.size(); i++) {
+                        ListIterator<E> iter = fusion.get(i);
+                        if (iter.hasNext()) {
+                                E candidate = iter.next();
+                                if (minElement == null || cmp.compare(candidate, minElement) < 0) {
+                                        if (minIteratorIndex != -1) {
+                                                fusion.get(minIteratorIndex).previous();
+                                        }
+                                        minElement = candidate;
+                                        minIteratorIndex = i;
+                                } else {
+                                        iter.previous();
                                 }
-
-                                if (cmp.compare(tmpNext, minNext) < 0) {
-                                        fusion.get(minIter).previous();
-                                        minNext = tmpNext;
-                                        minIter = cpt;
-                                        continue;
-                                }
-
-                                l.previous();
-
                         }
-
-                        cpt++;
-
                 }
 
-                lastCalledIter = minIter;
+                if (minIteratorIndex != -1) {
+                        lastCalledIter = minIteratorIndex;
+                }
 
-                return minNext;
+                return minElement;
+
         }
 
         /**
@@ -302,39 +294,32 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                         throw new NoSuchElementException();
                 }
 
-                int cpt = 0, maxIter = 0;
-                E maxPrevious = null, tmpPrevious;
+                E maxElement = null;
+                int maxIteratorIndex = -1;
 
-                for (ListIterator<E> l : fusion) {
-
-                        if (l.hasPrevious()) {
-
-                                tmpPrevious = l.previous();
-
-                                if (maxPrevious == null) {
-                                        maxPrevious = tmpPrevious;
-                                        maxIter = cpt;
-                                        continue;
+                // Recherche du précédent élément maximal parmi tous les itérateurs
+                for (int i = 0; i < fusion.size(); i++) {
+                        ListIterator<E> iter = fusion.get(i);
+                        if (iter.hasPrevious()) {
+                                E candidate = iter.previous();
+                                if (maxElement == null || cmp.compare(candidate, maxElement) > 0) {
+                                        // Mise à jour du maximum trouvé
+                                        if (maxIteratorIndex != -1) {
+                                                fusion.get(maxIteratorIndex).next(); // Annule le déplacement précédent
+                                        }
+                                        maxElement = candidate;
+                                        maxIteratorIndex = i;
+                                } else {
+                                        iter.next(); // Annule le déplacement pour les autres itérateurs
                                 }
-
-                                if (cmp.compare(tmpPrevious, maxPrevious) > 0) {
-                                        fusion.get(maxIter).next();
-                                        maxPrevious = tmpPrevious;
-                                        maxIter = cpt;
-                                        continue;
-                                }
-
-                                l.next();
-
                         }
-
-                        cpt++;
-
                 }
 
-                lastCalledIter = maxIter;
+                if (maxIteratorIndex != -1) {
+                        lastCalledIter = maxIteratorIndex; // Stocke l'indice de l'itérateur utilisé
+                }
 
-                return maxPrevious;
+                return maxElement;
         }
 
         /**
@@ -386,11 +371,12 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
          */
         public int lastIndex() {
 
-                return switch (lastCalled) {
-                        case 1 -> previousIndex();
-                        case -1 -> nextIndex();
-                        default -> -1;
-                };
+                if (lastCalled == 1) {
+                        return previousIndex();
+                } else if (lastCalled == -1) {
+                        return nextIndex();
+                }
+                return -1;
         }
 
         /**
