@@ -68,9 +68,9 @@ public class User implements Iterable<ClassifiedAd> {
 
 	public static final int DEFAULT_CASH_AMMOUNT = 100;
 
-	private String name, pswd;
+	private final String name, pswd;
 	private int budget;
-	private Instant date;
+	private final Instant date;
 
 	private MultiEnumList<AdCategory, ClassifiedAd> open;
 	private MultiEnumList<AdCategory, ClassifiedAd> closed;
@@ -373,6 +373,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @old oldDate = Instant.now();
 	 * @requires cat != null;
 	 * @requires msg != null;
+	 * @requires !msg.isBlank()
 	 * @requires price > 0;
 	 * @ensures get(OPEN, EnumSet.of(cat), 0).equals(\result);
 	 * @ensures \result.getCategory().equals(cat);
@@ -433,6 +434,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * 
 	 * @requires state != null;
 	 * @requires catSet != null;
+	 * @requires !catSet.contains(null)
 	 * @ensures \result >= 0;
 	 * @ensures getSelectedAdState().equals(state) &&
 	 *          getSelectedCategories().equals(catSet) <br/>
@@ -505,6 +507,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * 
 	 * @requires state != null;
 	 * @requires catSet != null;
+	 * @requires !catSet.contains(null)
 	 * @requires i >= 0 && i < size(state, catSet);
 	 * @ensures \result != null;
 	 * @ensures containsInState(state, \result);
@@ -601,12 +604,16 @@ public class User implements Iterable<ClassifiedAd> {
 	 * 
 	 * @return un itérateur sur les annonces dans l'état spécifié et dont la
 	 *         catégories appartient à l'ensemble spécifié
-	 * 
+	 *
+	 * @requires state != null
+	 * @requires catSet != null
+	 * @requires !catSet.contains(null)
+	 *
 	 * @ensures \result != null;
 	 * @ensures size(state, catSet) > 0 ==> \result.hasNext();
 	 * 
 	 * @throws NullPointerException si l'état spécifié ou l'ensemble de catégories
-	 *                              spécifié est null
+	 *                              spécifié est null ou si l'ensemble de états spécifié est null ou contient null
 	 * 
 	 * @pure
 	 */

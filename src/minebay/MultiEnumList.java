@@ -157,6 +157,7 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 	 *         catégories de l'ensemble spécifié
 	 * 
 	 * @requires catSet != null;
+	 * @requires !catSet.contains(null)
 	 * @ensures \result >= 0 && \result <= size();
 	 * @ensures catSet.isEmpty() ==> \result == 0;
 	 * @ensures catSet.equals(EnumSet.allOf(getCatType())) ==> \result == size();
@@ -205,6 +206,7 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 	 * 
 	 * @requires catSet != null;
 	 * @ensures size(catSet) == 0;
+	 * @requires !catSet.contains(null)
 	 * @ensures catSet.isEmpty() ==> size() == \old(size());
 	 * @ensures catSet.equals(EnumSet.allOf(getCatType())) ==> isEmpty();
 	 * @ensures (\forall E elt; catSet.contains(elt.getCategory()) &&
@@ -271,6 +273,7 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 	 *         catégorie appartient à l'ensemble spécifié
 	 * 
 	 * @requires i >= 0 && i < size(catSet);
+	 * @requires !catSet.contains(null)
 	 * @ensures contains(\result);
 	 * @ensures catSet.contains(\result.getCategory());
 	 * @ensures (\forall int j; j >= 0 && j < i; get(catSet, j).compareTo(\result)
@@ -357,6 +360,7 @@ public class MultiEnumList<C extends Enum<C>, E extends Categorized<C> & Compara
 	 *         catégorie appartient à l'ensemble spécifié
 	 * 
 	 * @requires catSet != null;
+	 * @requires !catSet.contains(null)
 	 * @ensures \result != null;
 	 * @ensures ListIterObserverAdapter.containsAll(\result, this);
 	 * @ensures ListIterObserverAdapter.size(\result) == size(catSet);
