@@ -6,6 +6,8 @@
 package minebay;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.ListIterator;
 import java.util.Set;
 
@@ -66,6 +68,17 @@ public class User implements Iterable<ClassifiedAd> {
 
 	public static final int DEFAULT_CASH_AMMOUNT = 100;
 
+	private String name, pswd;
+	private int budget;
+	private Instant date;
+
+	private MultiEnumList<AdCategory, ClassifiedAd> open;
+	private MultiEnumList<AdCategory, ClassifiedAd> closed;
+	private MultiEnumList<AdCategory, ClassifiedAd> purchaces;
+
+	private AdState state;
+	private Set<AdCategory> cats;
+
 	/**
 	 * Initialise une nouvelle instance ayant les nom et mot de passe spécifiés. La
 	 * date d'inscription du nouvel utilisateur est la date au moment de l'exécution
@@ -92,6 +105,28 @@ public class User implements Iterable<ClassifiedAd> {
 	 *                                  aucun caractères
 	 */
 	public User(String userName, String password) {
+
+		if ((userName == null) || (password == null)) {
+			throw new NullPointerException();
+		}
+
+		if ((userName.isBlank()) || (password.isBlank())) {
+			throw new IllegalArgumentException();
+		}
+
+		name = userName;
+		pswd = password;
+
+		date = Instant.now();
+
+		budget = DEFAULT_CASH_AMMOUNT;
+
+		open = new MultiEnumList<>(AdCategory.class);
+		closed = new MultiEnumList<>(AdCategory.class);
+		purchaces = new MultiEnumList<>(AdCategory.class);
+
+		state = AdState.OPEN;
+		cats = EnumSet.allOf(AdCategory.class);
 	}
 
 	/**
@@ -104,7 +139,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public AdState getSelectedAdState() {
-		return null;
+		return state;
 	}
 
 	/**
@@ -119,6 +154,12 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @throws NullPointerException si l'état spécifié est null
 	 */
 	public void selectAdState(AdState state) {
+
+		if (state == null) {
+			throw new NullPointerException();
+		}
+
+		this.state = state;
 	}
 
 	/**
@@ -138,7 +179,12 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @throws NullPointerException si la catégorie spécifiée est null
 	 */
 	public boolean addSelectedCategory(AdCategory cat) {
-		return false;
+
+		if (cat == null) {
+			throw new NullPointerException();
+		}
+
+		return cats.add(cat);
 	}
 
 	/**
@@ -154,7 +200,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 *          getSelectedCategories().equals(\old(getSelectedCategories()));
 	 */
 	public boolean removeSelectedCategory(Object obj) {
-		return false;
+		return cats.remove(obj);
 	}
 
 	/**
@@ -169,7 +215,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public Set<AdCategory> getSelectedCategories() {
-		return null;
+		return Collections.unmodifiableSet(cats);
 	}
 
 	/**
@@ -180,7 +226,14 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @ensures getSelectedCategories().isEmpty();
 	 */
 	public boolean clearSelectedCategories() {
-		return false;
+
+		if (cats.isEmpty()) {
+			return false;
+		}
+
+		cats.clear();
+
+		return true;
 	}
 
 	/**
@@ -191,7 +244,14 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @ensures getSelectedCategories().equals(EnumSet.allOf(AdCategory.class));
 	 */
 	public boolean selectAllCategories() {
-		return false;
+
+		if (cats.containsAll(EnumSet.allOf(AdCategory.class))) {
+			return false;
+		}
+
+		cats = EnumSet.allOf(AdCategory.class);
+
+		return true;
 	}
 
 	/**
@@ -202,7 +262,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public String getName() {
-		return null;
+		return name;
 	}
 
 	/**
@@ -213,7 +273,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public String getPassword() {
-		return null;
+		return pswd;
 	}
 
 	/**
@@ -224,7 +284,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public Instant getRegistrationDate() {
-		return null;
+		return date;
 	}
 
 	/**
@@ -236,7 +296,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public int getAvailableCash() {
-		return -1;
+		return budget;
 	}
 
 	/**
@@ -276,6 +336,26 @@ public class User implements Iterable<ClassifiedAd> {
 	 *                                  inférieur au prix de l'annonce spécifiée
 	 */
 	public void buy(User vendor, ClassifiedAd ad) {
+
+		if ((vendor == null) || (ad == null)) {
+			throw new NullPointerException();
+		}
+
+		if ((! vendor.containsInState(AdState.OPEN, ad)) || (vendor == this)){
+			throw new IllegalArgumentException();
+		}
+
+		if (budget < ad.getPrice()) {
+			throw new IllegalStateException();
+		}
+
+		purchaces.add(ad);
+		budget -= ad.getPrice();
+
+		vendor.open.remove(ad);
+		vendor.closed.add(ad);
+		vendor.budget += ad.getPrice();
+
 	}
 
 	/**
@@ -310,7 +390,21 @@ public class User implements Iterable<ClassifiedAd> {
 	 * 
 	 */
 	public ClassifiedAd add(AdCategory cat, String msg, int price) {
-		return null;
+
+		if ((cat == null) || (msg == null)) {
+			throw new NullPointerException();
+		}
+
+		if ((price <= 0) || (msg.isBlank())) {
+			throw new IllegalArgumentException();
+		}
+
+
+		ClassifiedAd ad = new ClassifiedAd(cat, msg, price);
+
+		open.add(ad);
+
+		return ad;
 	}
 
 	/**
@@ -327,7 +421,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public int size() {
-		return -1;
+		return size(state, cats);
 	}
 
 	/**
@@ -375,7 +469,7 @@ public class User implements Iterable<ClassifiedAd> {
 	 * @pure
 	 */
 	public ClassifiedAd get(int i) {
-		return null;
+		return get(state, cats, i);
 	}
 
 	/**
@@ -481,6 +575,8 @@ public class User implements Iterable<ClassifiedAd> {
 	 */
 	@Override
 	public String toString() {
-		return null;
+		String s = "L'utilisateur " + name + " a : \n" + open.toString() + " \n" + closed.toString() +
+			"\n" + purchaces.toString() + "\n\n\n";
+		return s;
 	}
 }

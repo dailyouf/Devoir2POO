@@ -64,7 +64,7 @@ public class ClassifiedAd implements Categorized<AdCategory>, Comparable<Classif
 			throw new NullPointerException();
 		}
 
-		if ((price <= 0) || (desc.isEmpty())) {
+		if ((price <= 0) || (desc.isBlank())) {
 			throw new IllegalArgumentException();
 		}
 
