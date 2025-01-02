@@ -6,7 +6,7 @@
 package minebay;
 
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
@@ -42,7 +42,7 @@ import java.util.NoSuchElementException;
  */
 public class FusionSortedIterator<E extends Comparable<? super E>> implements ListIterator<E> {
 
-        private ArrayList<ListIterator<E>> fusion;
+        private final LinkedList<ListIterator<E>> fusion;
 
         private final Comparator<? super E> cmp;
 
@@ -103,7 +103,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
 
                 cmp = comparator;
 
-                fusion = new ArrayList<>();
+                fusion = new LinkedList<>();
 
                 for (ListIterator<E> l : iters) {
 
@@ -115,7 +115,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                 }
 
                 lastCalled = 0;
-
+                lastCalledIter = -1;
         }
 
         /**
@@ -414,11 +414,13 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
         @Override
         public void remove() {
 
-                if (lastCalled == 0) {
+                if (lastCalled == 0 || lastCalledIter == -1) {
                         throw new IllegalStateException();
                 }
 
                 fusion.get(lastCalledIter).remove();
+                lastCalled = 0;
+                lastCalledIter = -1;
         }
 
         /**
