@@ -184,12 +184,7 @@ public class User implements Iterable<ClassifiedAd> {
 			throw new NullPointerException();
 		}
 
-		if (cats.contains(cat)) {
-			return false;
-		}
-
-		cats.add(cat);
-		return true;
+		return cats.add(cat);
 	}
 
 	/**
