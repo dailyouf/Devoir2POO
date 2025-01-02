@@ -193,8 +193,6 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
         @Override
         public E next() {
 
-                lastCalled = 1;
-
                 if (!hasNext()) {
                         throw new NoSuchElementException();
                 }
@@ -221,6 +219,8 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                 if (minIteratorIndex != -1) {
                         lastCalledIter = minIteratorIndex;
                 }
+
+                lastCalled = 1;
 
                 return minElement;
 
@@ -288,8 +288,6 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
         @Override
         public E previous() {
 
-                lastCalled = -1;
-
                 if (!hasPrevious()) {
                         throw new NoSuchElementException();
                 }
@@ -318,6 +316,8 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                 if (maxIteratorIndex != -1) {
                         lastCalledIter = maxIteratorIndex; // Stocke l'indice de l'itérateur utilisé
                 }
+
+                lastCalled = -1;
 
                 return maxElement;
         }
