@@ -196,11 +196,7 @@ public class ClassifiedAd implements Categorized<AdCategory>, Comparable<Classif
 			throw new NullPointerException();
 		}
 
-		if (isBefore(ad)) return 1;
-
-		if (isAfter(ad)) return -1;
-
-		return 0;
+		return -1 * date.compareTo(ad.date);
 
 	}
 
