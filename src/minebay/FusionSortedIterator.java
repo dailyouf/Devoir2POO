@@ -377,7 +377,6 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
         public int lastIndex() {
 
                 if (lastCalled == 1) {
-                        System.out.print("\n new \n");
                         return previousIndex();
                 } else if (lastCalled == -1) {
                         return nextIndex();
