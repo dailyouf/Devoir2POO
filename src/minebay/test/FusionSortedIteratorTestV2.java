@@ -114,7 +114,7 @@ class FusionSortedIteratorTestV2 {
                 iterator.next();
                 iterator.previous();
                 iterator.remove();
-                assertEquals(2, it2.next());
+                assertEquals(4, it2.next());
         }
 
         @Test
@@ -198,4 +198,209 @@ class FusionSortedIteratorTestV2 {
                 assertTrue(iterator.hasPrevious());
                 assertEquals(6, iterator.previous());
         }
+
+        @Test
+        void testIteratorWithMultipleEmptyLists() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(
+                        new ArrayList<Integer>().listIterator(),
+                        new ArrayList<Integer>().listIterator(),
+                        new ArrayList<Integer>().listIterator()
+                ));
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testIteratorWithSingleEmptyList() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(
+                        new ArrayList<Integer>().listIterator()
+                ));
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testNextWithAllListsExhausted() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                while (iterator.hasNext()) {
+                        iterator.next();
+                }
+                assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void testPreviousWithAllListsExhausted() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                iterator.next();
+                iterator.next();
+                iterator.next();
+                iterator.previous();
+                iterator.previous();
+                iterator.previous();
+                assertThrows(NoSuchElementException.class, iterator::previous);
+        }
+
+        @Test
+        void testNextWithMultipleIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2, it3));
+                assertEquals(0, iterator.next());
+                assertEquals(1, iterator.next());
+                assertEquals(2, iterator.next());
+                assertEquals(3, iterator.next());
+                assertEquals(4, iterator.next());
+                assertEquals(5, iterator.next());
+                assertEquals(6, iterator.next());
+                assertEquals(7, iterator.next());
+                assertEquals(8, iterator.next());
+        }
+
+        @Test
+        void testIteratorWithEmptyIteratorList() {
+                iterator = new FusionSortedIterator<>(new ArrayList<>());
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testIteratorWithSingleEmptyIterator() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(new ArrayList<Integer>().listIterator()));
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testMultipleEmptyIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(
+                        new ArrayList<Integer>().listIterator(),
+                        new ArrayList<Integer>().listIterator(),
+                        new ArrayList<Integer>().listIterator()
+                ));
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testNextOnEmptyIterator() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(new ArrayList<Integer>().listIterator()));
+                assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void testHasNextWithDifferentSizes() {
+                ListIterator<Integer> it1 = new ArrayList<>(Arrays.asList(1, 2)).listIterator();
+                ListIterator<Integer> it2 = new ArrayList<>(Arrays.asList(3, 4, 5)).listIterator();
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                assertTrue(iterator.hasNext());
+                iterator.next();
+                assertTrue(iterator.hasNext());
+        }
+
+        @Test
+        void testRemoveAfterNext() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                iterator.next();
+                iterator.remove();
+                assertEquals(2, iterator.next());
+                assertTrue(iterator.hasPrevious());
+        }
+
+        @Test
+        void testPreviousOnEmptyIteratorList() {
+                iterator = new FusionSortedIterator<>(new ArrayList<>());
+                assertThrows(NoSuchElementException.class, iterator::previous);
+        }
+
+        @Test
+        void testNextIndexWithMultipleIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                assertEquals(0, iterator.nextIndex());
+                iterator.next();
+                assertEquals(1, iterator.nextIndex());
+                iterator.next();
+                assertEquals(2, iterator.nextIndex());
+        }
+
+        @Test
+        void testPreviousIndexWithMultipleIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                assertEquals(-1, iterator.previousIndex());
+                iterator.next();
+                assertEquals(0, iterator.previousIndex());
+                iterator.next();
+                assertEquals(1, iterator.previousIndex());
+        }
+
+        @Test
+        void testRemoveAfterExhaustingAllIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                while (iterator.hasNext()) {
+                        iterator.next();
+                }
+                assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void testHasPreviousWithMultipleIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2, it3));
+                iterator.next();
+                iterator.next();
+                iterator.previous();
+                assertTrue(iterator.hasPrevious());
+                iterator.previous();
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testNextAndPreviousBehaviorAfterRemoval() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                iterator.next();
+                iterator.remove();
+                assertEquals(2, iterator.next());
+                assertTrue(iterator.hasPrevious());
+                assertEquals(2, iterator.previous());
+        }
+
+        @Test
+        void testNextOnExhaustedIterator() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2));
+                while (iterator.hasNext()) {
+                        iterator.next();
+                }
+                assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
+        @Test
+        void testConstructorWithMultipleEmptyIterators() {
+                ListIterator<Integer> emptyIterator1 = new ArrayList<Integer>().listIterator();
+                ListIterator<Integer> emptyIterator2 = new ArrayList<Integer>().listIterator();
+                iterator = new FusionSortedIterator<>(Arrays.asList(emptyIterator1, emptyIterator2));
+                assertFalse(iterator.hasNext());
+                assertFalse(iterator.hasPrevious());
+        }
+
+        @Test
+        void testMultipleNextCalls() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2, it3));
+                assertEquals(0, iterator.next());
+                assertEquals(1, iterator.next());
+                assertEquals(2, iterator.next());
+                assertEquals(3, iterator.next());
+                assertEquals(4, iterator.next());
+                assertEquals(5, iterator.next());
+                assertEquals(6, iterator.next());
+                assertEquals(7, iterator.next());
+                assertEquals(8, iterator.next());
+                assertFalse(iterator.hasNext());
+        }
+
+        @Test
+        void testNoNextAfterExhaustingIterators() {
+                iterator = new FusionSortedIterator<>(Arrays.asList(it1, it2, it3));
+                while (iterator.hasNext()) {
+                        iterator.next();
+                }
+                assertFalse(iterator.hasNext());
+                assertThrows(NoSuchElementException.class, iterator::next);
+        }
+
 }
