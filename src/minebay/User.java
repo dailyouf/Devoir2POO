@@ -365,9 +365,7 @@ public class User implements Iterable<ClassifiedAd> {
          */
         public ClassifiedAd add(AdCategory cat, String msg, int price) {
 
-                if ((cat == null) || (msg == null)) {
-                        throw new NullPointerException();
-                }
+                if ((cat == null) || (msg == null)) throw new NullPointerException();
 
                 if ((price <= 0) || (msg.isBlank())) {
                         throw new IllegalArgumentException();
@@ -508,7 +506,7 @@ public class User implements Iterable<ClassifiedAd> {
          */
         public boolean containsInState(AdState state, Object obj) {
 
-                if ((state == null) || (obj == null)) {
+                if (state == null) {
                         throw new NullPointerException();
                 }
 
