@@ -114,8 +114,8 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                         fusion.add(l);
                 }
 
-                lastCalled = 0;
                 lastCalledIter = -1;
+                lastCalled = 0;
         }
 
         /**
@@ -165,8 +165,15 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                         throw new NoSuchElementException();
                 }
 
+                int tmpC = lastCalled;
+                int tmpIter = lastCalledIter;
+
                 E res = next();
                 previous();
+
+                lastCalled = tmpC;
+                lastCalledIter = tmpIter;
+
                 return res;
 
         }
@@ -257,8 +264,15 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
                         throw new NoSuchElementException();
                 }
 
+                int tmpC = lastCalled;
+                int tmpIter = lastCalledIter;
+
                 E res = previous();
                 next();
+
+                lastCalled = tmpC;
+                lastCalledIter = tmpIter;
+
                 return res;
 
         }
@@ -363,6 +377,7 @@ public class FusionSortedIterator<E extends Comparable<? super E>> implements Li
         public int lastIndex() {
 
                 if (lastCalled == 1) {
+                        System.out.print("\n new \n");
                         return previousIndex();
                 } else if (lastCalled == -1) {
                         return nextIndex();
