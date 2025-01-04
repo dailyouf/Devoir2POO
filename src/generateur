@@ -19,4 +19,4 @@ mv rapport/TEST-junit-jupiter.xml rapport/TEST-junit-jupiterUser.xml
 find . -name "*.class" -type f -delete
 
 mkdir toSend
-cp rapport/* minebay/ClassifiedAd.java  minebay/FusionSortedIterator.java  minebay/MultiEnumListTest.java  minebay/User.java ToSend
+cp rapport/*jupiter* minebay/ClassifiedAd.java  minebay/FusionSortedIterator.java  minebay/MultiEnumListTest.java  minebay/User.java toSend/
