@@ -1,0 +1,19 @@
+#!/bin/sh
+
+junit5cc minebay/test/ClassifiedAdTest.java
+junit5 minebay.test.ClassifiedAdTest --reports-dir=rapport
+mv rapport/TEST-junit-jupiter.xml rapport/TEST-junit-jupiterClassifiedAd.xml
+
+junit5cc minebay/test/FusionSortedIteratorTest.java
+junit5 minebay.test.FusionSortedIteratorTest --reports-dir=rapport
+mv rapport/TEST-junit-jupiter.xml rapport/TEST-junit-jupiterFusionSortedIterator.xml
+
+junit5cc minebay/test/MultiEnumListTest.java
+junit5 minebay.test.MultiEnumListTest --reports-dir=rapport
+mv rapport/TEST-junit-jupiter.xml rapport/TEST-junit-jupiterMultiEnumList.xml
+
+junit5cc minebay/test/UserTest.java
+junit5 minebay.test.UserTest --reports-dir=rapport
+mv rapport/TEST-junit-jupiter.xml rapport/TEST-junit-jupiterUser.xml
+
+find . -name "*.class" -type f -delete
